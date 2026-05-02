@@ -44,7 +44,7 @@ int main(void){
             break;
             //case 4: buscarTareas(&LP, &LR);
             //break;
-            case 5: printf("Menú cerrado.\n");
+            case 5: printf("Menu cerrado.\n");
             break;
             default: printf("\n\nIngrese un numero valido.\n\n");
             break;
@@ -92,6 +92,9 @@ void listarTareas(Nodo * L, Nodo * L2){
         printf("\tDuracion: %d\n", aux->T.Duracion);
         aux = aux->Siguiente;
     }
+    if(L == NULL){
+        printf("\nNo hay ninguna tarea pendiente. Buen trabajo.\n");
+    }
     
     aux = L2;
     printf("\n\nTareas Realizadas:\n\n");
@@ -101,10 +104,55 @@ void listarTareas(Nodo * L, Nodo * L2){
         printf("\tDuracion: %d\n", aux->T.Duracion);
         aux = aux->Siguiente;
     }
+    if(L2 == NULL){
+        printf("\nNo hay ninguna tarea realizada. A trabajar!.\n");
+    }
 }
 
 void completarTareas(Nodo ** L, Nodo ** L2){
-    
+    Nodo * aux, * aux2;
+    int iter, id, b = 0;
+    aux = *L;
+    printf("\n\nTareas Pendientes:\n\n");
+    while(aux != NULL){
+        printf("\nTarea %d: \n", aux->T.TareaID);
+        printf("\tDescripcion: %s\n", aux->T.Descripcion);
+        printf("\tDuracion: %d\n", aux->T.Duracion);
+        aux = aux->Siguiente;
+    }
+
+    do{
+        printf("Ingrese la id de la tarea a marcar como realizada:\n");
+        scanf("%d", &id);
+        aux = *L;
+        if(*L != NULL){
+            do{
+                b = 0;
+                if((*L)->T.TareaID == id){
+                    *L = (*L)->Siguiente;
+                    aux2 = *L2;
+                    *L2 = aux;
+                    aux->Siguiente = aux2;
+                    b = 1;
+                } else if(aux->Siguiente != NULL && aux->Siguiente->T.TareaID == id){
+                    aux2 = *L2;
+                    *L2 = aux->Siguiente;
+                    aux->Siguiente = aux->Siguiente->Siguiente;
+                    (*L2)->Siguiente = aux2;
+                    b = 1;
+                } else if(aux->Siguiente != NULL){
+                    aux = aux->Siguiente;
+                }
+            } while(aux->Siguiente != NULL  && aux->Siguiente->T.TareaID != id && b==0);
+            if(b == 0){
+                printf("La id no se encontraba en la lista.\n");
+            }
+        } else {
+            printf("La lista de tareas pendientes está vacía.\n");
+        }
+        printf("Escriba 1 si desea ingresar otro nodo (cualquier otro numero cerrara la interfaz)\n");
+        scanf("%d", &iter);
+    } while(iter == 1);
 }
 
 void eliminarLista(Nodo ** L){
