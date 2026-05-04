@@ -17,7 +17,7 @@ void cargarTarea(Nodo ** L, int * c);
 void insertarTarea(Nodo ** L, Nodo * N);
 void completarTareas(Nodo ** L, Nodo ** L2);
 void listarTareas(Nodo * L, Nodo * L2);
-//void buscarTareas(Nodo ** L, Nodo ** L2);
+void buscarTareas(Nodo ** L, Nodo ** L2);
 void eliminarLista(Nodo ** L);
 int listaVacia(Nodo ** L);
 
@@ -42,8 +42,8 @@ int main(void){
             break;
             case 3: listarTareas(LP, LR);
             break;
-            //case 4: buscarTareas(&LP, &LR);
-            //break;
+            case 4: buscarTareas(&LP, &LR);
+            break;
             case 5: printf("Menu cerrado.\n");
             break;
             default: printf("\n\nIngrese un numero valido.\n\n");
@@ -171,4 +171,87 @@ int listaVacia(Nodo ** L){
     } else {
         return 0;
     }
+}
+
+void buscarTareas(Nodo ** L, Nodo ** L2){
+    int op, id, b = 0;
+    char Buff[30];
+    Nodo * aux;
+    
+    do{
+        printf("\n\nIndique si desea buscar la tarea:\n1. Por ID\n2. Por palabra clave\n3. Salir de la interfaz\n");
+        scanf("%d", &op);
+        b = 0;
+        if(op == 1){
+            do{
+                printf("Ingrese la ID de la tarea a buscar:\n");
+                scanf("%d", &id);
+            }while(id<1000);
+            aux = *L;
+            while(aux != NULL){
+                if(aux->T.TareaID == id){
+                    printf("Tarea de id %d:\n", id);
+                    printf("\tDescripcion: %s\n", aux->T.Descripcion);
+                    printf("\tDuracion: %d\n", aux->T.Duracion);
+                    printf("\tSe trata de una tarea pendiente\n");
+                    b = 1;
+                    aux = NULL;
+                } else {
+                    aux = aux->Siguiente;
+                }
+            }
+            if(b == 0){
+                aux = *L2;
+                while(aux != NULL){
+                    if(aux->T.TareaID == id){
+                        printf("Tarea de id %d:\n", id);
+                        printf("\tDescripcion: %s\n", aux->T.Descripcion);
+                        printf("\tDuracion: %d\n", aux->T.Duracion);
+                        printf("\tSe trata de una tarea realizada\n");
+                        b = 1;
+                        aux = NULL;
+                    } else {
+                        aux = aux->Siguiente;
+                    }
+                }
+            }
+            if(b == 0){
+                printf("No se encontro la id de la tarea.\n");
+            }
+        } else if(op == 2){
+            printf("Ingrese una palabra clave de la descripcion de la tarea a buscar:\n");
+            scanf("%s", Buff);
+            aux = *L;
+            while(aux != NULL){
+                if(strstr(aux->T.Descripcion, Buff) != NULL){
+                    printf("Tarea de id %d:\n", id);
+                    printf("\tDescripcion: %s\n", aux->T.Descripcion);
+                    printf("\tDuracion: %d\n", aux->T.Duracion);
+                    printf("\tSe trata de una tarea pendiente\n");
+                    b = 1;
+                    aux = NULL;
+                } else {
+                    aux = aux->Siguiente;
+                }
+            }
+            if(b == 0){
+                aux = *L2;
+                while(aux != NULL){
+                    if(strstr(aux->T.Descripcion, Buff) != NULL){
+                        printf("Tarea de id %d:\n", id);
+                        printf("\tDescripcion: %s\n", aux->T.Descripcion);
+                        printf("\tDuracion: %d\n", aux->T.Duracion);
+                        printf("\tSe trata de una tarea realizada\n");
+                        b = 1;
+                        aux = NULL;
+                    } else {
+                        aux = aux->Siguiente;
+                    }
+                }
+            }
+            if(b == 0){
+                printf("No se encontro ninguna tarea con la palabra clave");
+            }
+        }
+    } while(op != 3);
 }
